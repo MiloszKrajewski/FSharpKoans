@@ -4,7 +4,7 @@ open System
 open System.Collections.Generic
 open System.Reflection
 
-type KoanRunner(containers) =
+type KoanRunner (containers) =
     let findFailureOrLastResult (values:seq<KoanResult>) =
         let e = values.GetEnumerator()
         let rec helper() =
@@ -17,7 +17,7 @@ type KoanRunner(containers) =
                 last
         helper()
 
-    let buildKoanResult builderString (current:KoanResult) (next:KoanResult) =
+    let buildKoanResult builderString (current: KoanResult) (next: KoanResult) =
         next
         |> KoanResult.map (sprintf builderString current.Message)
 

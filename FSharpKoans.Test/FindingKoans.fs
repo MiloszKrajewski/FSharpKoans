@@ -2,11 +2,10 @@
 
 open FSharpKoans.Core
 open FSharpKoans.Core.KoanContainer
+open Xunit
 
-open NUnit.Framework
+let private test<'T> (a: 'T) (b: 'T) = Xunit.Assert.Equal(a, b)
 
-open System.IO
-    
 type TestContainer() =
     [<Koan>]
     static member Koan1 () =
@@ -22,12 +21,12 @@ let getKoanNames container =
     |> Seq.map (fun x -> x.Name)
     |> Seq.toList
         
-[<Test>]
+[<Fact>]
 let ``getting koans from a container`` () = 
     let koanNames = getKoanNames typeof<TestContainer>
-    let expected =  [ "Koan1"; "Koan2" ]
-    Assert.AreEqual(expected, koanNames)
-    
+    let expected = [ "Koan1"; "Koan2" ]
+    test expected koanNames
+
 type TestContainer2() =
     [<Koan>]
     static member Z () =
@@ -49,8 +48,8 @@ type TestContainer2() =
     static member ``0`` () =
         ()
         
-[<Test>]
+[<Fact>]
 let ``Koans are returned in defined order regardless of name`` () =
     let koanNames = getKoanNames typeof<TestContainer2>
     let expected =  [ "Z"; "A"; "a"; "_0"; "0" ]
-    Assert.AreEqual(expected, koanNames)
+    test expected koanNames

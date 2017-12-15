@@ -13,7 +13,7 @@ with
 
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module KoanResult =
-    let map f (x:KoanResult) =
+    let map f (x: KoanResult) =
         match x with
         | Success m -> Success <| f m
         | Failure (m, e) -> Failure (f m, e)

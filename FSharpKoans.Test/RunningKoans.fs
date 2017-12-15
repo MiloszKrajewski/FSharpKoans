@@ -1,12 +1,16 @@
 ﻿module KoansRunner.Test.RunningKoans
 
 open FSharpKoans.Core
-open NUnit.Framework
+open Xunit
+open System
+
+let private test<'T> (a: 'T) (b: 'T) = Xunit.Assert.Equal(a, b)
+let private fail message = raise (Xunit.Sdk.XunitException(message)) |> ignore
 
 type FailureContainer() =
     [<Koan>]
     static member FailureKoan() =
-        Assert.Fail("expected failure")
+        fail "expected failure"
         
 type SuccessContainer() =
     [<Koan>]
@@ -25,13 +29,13 @@ type SomeSuccesses() =
 type MixedBag() =
     [<Koan>]
     static member One() =
-        Assert.Fail("Game over")
+        fail "Game over"
     
     [<Koan>]
     static member Two() =
         "OH YEAH!"
         
-[<Test>]
+[<Fact>]
 let ``A failing koan returns its exception`` () =
     let result = 
         typeof<FailureContainer>
@@ -43,27 +47,27 @@ let ``A failing koan returns its exception`` () =
         | Failure (_, ex) -> ex
         | _ -> null
     
-    Assert.AreEqual("expected failure", ex.Message)
+    test "expected failure" ex.Message
     
-[<Test>]
+[<Fact>]
 let ``A failing koan returns a failure message`` () =
     let result = 
         typeof<FailureContainer>
         |> KoanContainer.runKoans
         |> Seq.head
         
-    Assert.AreEqual("FailureKoan failed.", result.Message)
+    test "FailureKoan failed." result.Message
 
-[<Test>]
+[<Fact>]
 let ``A successful koans returns a success message`` () =
     let result =
         typeof<SuccessContainer>
         |> KoanContainer.runKoans
         |> Seq.head
         
-    Assert.AreEqual("SuccessKoan passed", result.Message)
+    test "SuccessKoan passed" result.Message
     
-[<Test>]
+[<Fact>]
 let ``The outcome of all successful koans is returned`` () =
     let result =
         typeof<SomeSuccesses>
@@ -75,9 +79,9 @@ let ``The outcome of all successful koans is returned`` () =
         "One passed" + System.Environment.NewLine +
         "Two passed"
         
-    Assert.AreEqual(expected, result)
+    test expected result
     
-[<Test>]
+[<Fact>]
 //might want to change this behavior
 let ``Failed Koans don't stop the enumeration`` () =
     let result =
@@ -86,9 +90,8 @@ let ``Failed Koans don't stop the enumeration`` () =
         |> Seq.map (fun x -> x.Message)
         |> Seq.reduce (fun x y -> x + System.Environment.NewLine + y)
         
-        
     let expected =
         "One failed." + System.Environment.NewLine +
         "Two passed"
         
-    Assert.AreEqual(expected, result)
+    test expected result

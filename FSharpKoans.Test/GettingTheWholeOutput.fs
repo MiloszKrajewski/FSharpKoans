@@ -1,6 +1,10 @@
 ﻿module KoansRunner.Test.GetttingTheWholeOutput
+
 open FSharpKoans.Core
-open NUnit.Framework
+open Xunit
+
+let private test<'T> (a: 'T) (b: 'T) = Xunit.Assert.Equal(a, b)
+let private fail message = Xunit.Assert.True(false, message)
 
 type ContainerOne() =
     [<Koan>]
@@ -22,14 +26,14 @@ type ContainerTwo() =
     
     [<Koan>]
     static member Five() =
-        Assert.Fail("Expected")
+        fail "Expected"
         
 
     [<Koan>]
     static member Six() =
         "FTW!"
         
-[<Test>]
+[<Fact>]
 let ``Output contains container name followed by koan results. Stops on failure`` () =
     let runner = KoanRunner([| typeof<ContainerOne>; typeof<ContainerTwo> |])
     let result = runner.ExecuteKoans()
@@ -47,4 +51,4 @@ ContainerTwo:
     Five failed."
     
     
-    Assert.AreEqual(expected, result.Message)
+    test expected result.Message
