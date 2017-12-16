@@ -1,5 +1,9 @@
-﻿open FSharpKoans
+﻿open System
 open FSharpKoans.Core
+
+let line60 = new string('-', 60)
+
+printf "\n\n\n%s\n\n\n" line60
 
 let runner = KoanRunner()
 let result = runner.ExecuteKoans()
@@ -17,10 +21,5 @@ match result with
     printfn ""
     printfn "Please meditate on the following code:"
     printfn "%s" ex.StackTrace
-    
-printfn ""
-printfn ""
-printfn ""
-printfn ""
-printf "Press any key to continue..."
-System.Console.ReadKey() |> ignore
+
+printf "\n\n\n%s\n%s\n\n\n" (DateTime.Now.ToString ()) line60

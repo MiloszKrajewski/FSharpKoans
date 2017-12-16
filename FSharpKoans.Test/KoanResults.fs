@@ -1,8 +1,12 @@
 ﻿module KoansRunner.Test.KoanResults
-open FSharpKoans.Core
-open NUnit.Framework
 
-[<Test>]
+open FSharpKoans.Core
+open Xunit
+
+let private test<'T> (a: 'T) (b: 'T) = Xunit.Assert.Equal(a, b)
+let private fail message = Xunit.Assert.True(false, message)
+
+[<Fact>]
 let ``map lets you project a message when success``() =
     let result = Success "sample message"
 
@@ -10,15 +14,15 @@ let ``map lets you project a message when success``() =
         result
         |> KoanResult.map (fun x -> x + " expanded")
 
-    Assert.AreEqual(Success "sample message expanded", mappedResult)
+    test (Success "sample message expanded") mappedResult
 
-[<Test>]
+[<Fact>]
 let ``map lets you project a message when failure``() =
-    let ex = new System.Exception("abcd")
+    let ex = System.Exception("abcd")
     let result = Failure ("sample message", ex)
 
     let mappedResult = 
         result
         |> KoanResult.map (fun x -> x + " expanded")
 
-    Assert.AreEqual(Failure ("sample message expanded", ex), mappedResult)
+    test (Failure ("sample message expanded", ex)) mappedResult
