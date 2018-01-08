@@ -21,7 +21,15 @@ This edition of F# Koans targets .NET Core 2.0 and can be run on Windows, Mac an
 The only prerequsite is [.NET Core](https://www.microsoft.com/net/learn/get-started/windows)
 
 ### Running the Koans
-Open Koans folder and run:
+
+Clone this repository:
+
+```bash
+git clone https://github.com/MiloszKrajewski/FSharpKoans.git
+cd FSharpKoans
+```
+
+After opening Koans folder just run:
 
 ```bash
 koans
